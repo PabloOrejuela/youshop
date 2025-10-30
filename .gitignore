@@ -1,67 +1,127 @@
-# ========================================
-# 🐘 PHP / CodeIgniter 4 .gitignore
-# ========================================
+# ======================================================
+# 🐘 CodeIgniter 4 / PHP — .gitignore optimizado
+# ======================================================
 
-# --- Archivos del sistema operativo ---
+# Mantén este archivo en control de versiones
+!.gitignore
+
+# ------------------------------------------------------
+# 🧩 Archivos del sistema operativo
+# ------------------------------------------------------
+# macOS
 .DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
 Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
 
-# --- Configuración de IDEs / editores ---
-.vscode/
-.idea/
-*.sublime-project
-*.sublime-workspace
+# Linux
+*~
+.directory
+.Trash-*
 
-# --- Archivos temporales y de logs ---
-*.log
-*.bak
-*.tmp
-*.swp
-*.swo
-
-# --- Archivos de entorno (muy importantes) ---
+# ------------------------------------------------------
+# ⚙️ Archivos de entorno y configuración local
+# ------------------------------------------------------
 .env
 .env.*
-!.env.example   # conserva solo el ejemplo vacío
+.vagrant
+Vagrantfile
 
-# --- Dependencias de Composer ---
+# ------------------------------------------------------
+# 🧰 Archivos temporales y de ejecución
+# ------------------------------------------------------
+php_errors.log
+
+writable/cache/*
+!writable/cache/index.html
+
+writable/logs/*
+!writable/logs/index.html
+
+writable/session/*
+!writable/session/index.html
+
+writable/uploads/*
+!writable/uploads/index.html
+
+writable/debugbar/*
+
+# ------------------------------------------------------
+# 🖼️ Archivos de imágenes o multimedia (opcional)
+# ------------------------------------------------------
+# Si tus imágenes de productos se generan o cargan desde el panel,
+# no deberían subirse al repo. Si son recursos estáticos del front,
+# comenta la línea siguiente.
+public/images/productos/
+
+# ------------------------------------------------------
+# 📚 Archivos del User Guide (documentación interna)
+# ------------------------------------------------------
+user_guide_src/build/*
+user_guide_src/cilexer/build/*
+user_guide_src/cilexer/dist/*
+user_guide_src/cilexer/pycilexer.egg-info/*
+
+# ------------------------------------------------------
+# 🧪 Archivos de test
+# ------------------------------------------------------
+tests/coverage*
+phpunit
+/results/
+/phpunit*.xml
+/.phpunit.*.cache
+
+# ------------------------------------------------------
+# 🎵 Dependencias Composer
+# ------------------------------------------------------
 /vendor/
+/composer.lock   # opcional, elimínala de aquí si quieres fijar versiones
 
-# --- Archivos de caché de CodeIgniter ---
-/writable/cache/*
-!/writable/cache/index.html  # mantenemos el index.html vacío
-/writable/*
+# ------------------------------------------------------
+# 🧑‍💻 Archivos de IDEs y entornos de desarrollo
+# ------------------------------------------------------
+# JetBrains (PHPStorm, etc)
+.idea/
+*.iml
 
-# --- Archivos de logs de CodeIgniter ---
-/writable/logs/*
-!/writable/logs/index.html
+# NetBeans
+nbproject/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+.nb-gradle/
 
-# --- Archivos de sesiones ---
-/writable/session/*
-!/writable/session/index.html
+# Sublime Text
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+*.sublime-workspace
+*.sublime-project
+.phpintel
 
-# --- Archivos temporales o subidos ---
-/writable/uploads/*
-!/writable/uploads/index.html
+# Visual Studio Code
+.vscode/
 
-# --- Archivos generados por herramientas externas ---
-/phpunit.xml
-/build/
-/coverage/
-/composer.lock  # opcional: si quieres fijar dependencias, elimínalo de aquí
+# PHPenv
+.php-version
 
-# --- Archivos de bases de datos locales ---
-*.sqlite
-*.sql
-*.db
-
-# --- Archivos de backup ---
-*.zip
-*.tar
-*.gz
-*.7z
-*.rar
-
-# --- Configuración de servidor local ---
-/.env.local
-/.htaccess.backup
+# ------------------------------------------------------
+# 🧩 Otros archivos
+# ------------------------------------------------------
+_modules/*       # módulos de prueba locales
+/api/            # si es una carpeta generada dinámicamente
+db/              # bases de datos o backups locales (*.sqlite, *.sql, etc.)
