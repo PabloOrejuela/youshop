@@ -1,0 +1,21 @@
+.card{
+    padding: 10px;
+}
+
+.card-body{
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.pagination{
+    text-align: right;
+    position: fixed;
+    float: right !important;
+}
+
+#textoObligatorios{
+    color: blue;
+    font-size: 0.8em;
+    font-style: italic;
+    margin-top: 10px;
+}
