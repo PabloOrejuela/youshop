@@ -2,10 +2,10 @@
 
 <h3>Cambios</h3>
 <ul>
-<li>Corregido el gitignore</li>
+<li>Se ha cambiado la versión del ACL a al nueva versión controlada desde el baseController usando herencia</li>
 </ul>
 
 <h3>Fixes</h3>
 <ul>
-<li>Corregido el gitignore</li>
+<li></li>
 </ul>

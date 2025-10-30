@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class UsuarioModel extends Model {
+class SessionModel extends Model {
 
-    protected $table            = 'usuarios';
+    protected $table            = 'sessions';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
-    protected $protectFields    = false;
-    protected $allowedFields    = [];
+    protected $protectFields    = true;
+    protected $allowedFields    = ['is_logged','ip','agent','idusuario','status'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -44,35 +44,31 @@ class UsuarioModel extends Model {
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    // function _getLogStatus($id){
-    //     $result = NULL;
-    //     $builder = $this->db->table('usuarios');
-    //     $builder->select('logged')->where('id', $id);
-    //     $query = $builder->get();
-    //     if ($query->getResult() != null) {
-    //         foreach ($query->getResult() as $row) {
-    //             $result = $row->logged;
-    //         }
-    //     }
-    //     //echo $this->db->getLastQuery();
-    //     return $result;
-    // }
-
-    function _getUsuario($usuario){
+    function _getLogueados(){
         $result = NULL;
         $builder = $this->db->table($this->table);
-        $builder->select(
-            'usuarios.id as id,nombre,user,telefono,email,password,cedula,idrol,rol,facturacion,administracion,roles.estado as estado,membresia,
-            reportes,instructor,usuarios,usuarios.estado as userstatus,created_at as miembro_desde'
-        )->where('user', $usuario['user'])->where('usuarios.estado', 1);
-        $builder->join('roles', 'roles.id=usuarios.idrol');
+        $builder->select('*')->where('is_logged', 1);
+        $builder->orderBy('nombre', 'asc');
         $query = $builder->get();
         if ($query->getResult() != null) {
             foreach ($query->getResult() as $row) {
-                $result = $row;
+                $result[] = $row;
             }
         }
         //echo $this->db->getLastQuery();
         return $result;
+    }
+
+    //Pasar esta función al modelo de sesiones
+    public function _cierraSesiones() {
+        $now = date('Y-m-d');
+        $fechaCierre = $now.' 00:00:01';
+        //echo '<pre>'.var_export($usuarios, true).'</pre>';exit;
+        $builder = $this->db->table($this->table);
+
+        $builder->where('updated_at <=', $fechaCierre);
+        $builder->set('status', 0);
+        $builder->update();
+        //echo $this->db->getLastQuery();
     }
 }

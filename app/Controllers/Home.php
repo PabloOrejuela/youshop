@@ -13,17 +13,6 @@ class Home extends BaseController {
     private $mes;
     private $anio;
 
-    public function acl() {
-        $data['idrol'] = $this->session->idrol;
-        $data['id'] = $this->session->id;
-        $data['logged'] = $this->usuarioModel->_getLogStatus($data['id']);
-        $data['nombre'] = $this->session->nombre;
-        $data['miembro_desde'] = $this->session->created_at;
-        
-        return $data;
-    }
-
-
     public function __construct(){
 
         $this->mes = date('m');
@@ -35,14 +24,49 @@ class Home extends BaseController {
 
         $data = $this->acl();
         
-        if ($data['logged'] == 1 ) {
+        if ($data['is_logged'] == 1 ) {
             
             $data['session'] = $this->session;
 
+            $this->sessionModel->_cierraSesiones();
             return redirect()->to('inicio');
         }else{
             $this->logout();
         }
+    }
+
+    public function getClientIp() {
+        $ip = null;
+
+        // Lista de cabeceras comunes que podrían contener la IP real
+        $headers = [
+            'HTTP_CLIENT_IP',
+            'HTTP_X_FORWARDED_FOR',
+            'HTTP_X_FORWARDED',
+            'HTTP_X_CLUSTER_CLIENT_IP',
+            'HTTP_FORWARDED_FOR',
+            'HTTP_FORWARDED',
+            'REMOTE_ADDR'
+        ];
+
+        foreach ($headers as $key) {
+            if (!empty($_SERVER[$key])) {
+                $ipList = explode(',', $_SERVER[$key]); // puede haber varias IPs separadas por comas
+                foreach ($ipList as $ipCandidate) {
+                    $ipCandidate = trim($ipCandidate);
+                    // Validar que sea una IP pública válida
+                    if (filter_var(
+                        $ipCandidate,
+                        FILTER_VALIDATE_IP,
+                        FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+                    )) {
+                        return $ipCandidate;
+                    }
+                }
+            }
+        }
+
+        return $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
     }
 
     public function validate_login(){
@@ -60,66 +84,53 @@ class Home extends BaseController {
             return redirect()->back()->withInput()->with('errors', $this->validation->getErrors());
         }else{ 
 
-            //$usuario = $this->usuarioModel->_getUsuario($data);
-
             // recuperamos el hash del usuario almacenado en base de datos
-            $usuario = $this->usuarioModel->select('usuarios.id as id,nombre,user,telefono,email,password,cedula,idrol,logged,rol,
-            facturacion,administracion,reportes,instructor,membresia,usuarios.estado as estado,usuarios.created_at as miembro_desde')
-                    ->join('roles','roles.id = usuarios.idrol')
-                    ->where('user', $data['user'])
-                    ->findAll();
-            
-            // comprobamos si la contraseña enviada desde el formulario se corresponde con el hash alojado
+            $usuario = $this->usuarioModel->_getUsuario($data);
 
-            $ip = $_SERVER['REMOTE_ADDR'];
+            $ip = $this->getClientIp();
+            $agent = $_SERVER['HTTP_USER_AGENT'];
             $estado = 1;
             
             if ($estado == 0) {
                 return redirect()->to('/');
             }else{
                 
-                if (isset($usuario) && $usuario != NULL && password_verify($data['password'], $usuario[0]->password)) {
+                if (isset($usuario) && $usuario != NULL && password_verify($data['password'], $usuario->password)) {
 
-                    //valido el login y pongo el id en sesion  && $usuario->id != 1 
-                    if ($usuario[0]->logged == 1) {
-                        //Está logueado así que lo deslogueo
-                        $user = [
-                            'id' => $usuario[0]->id,
-                            'logged' => 0,
-                            'ip' => 0
-                        ];
-                        $this->usuarioModel->update($usuario[0]->id, $user);
-                    }
+                    $iduser = $usuario->id;
+                    $this->session->version = $this->datosSistemaModel->findAll();
                     
+
+                    //CREO LA SESION NUEVA EN LA TABLA DE SESIONES
+                    $session = [
+                        'is_logged' => 1,
+                        'ip' => $ip,
+                        'agent' => $agent,
+                        'status' => 1,
+                        'idusuario' => $iduser,
+                    ];
+
+                    $idsession = $this->sessionModel->insert($session);
+
                     $sessiondata = [
-                        
-                        'id' => $usuario[0]->id,
-                        'nombre' => $usuario[0]->nombre,
-                        'idrol' => $usuario[0]->idrol,
-                        'rol' => $usuario[0]->rol,
-                        'cedula' => $usuario[0]->cedula,
-                        'logged' => $usuario[0]->logged,
-                        'administracion' => $usuario[0]->administracion,
-                        'facturacion' => $usuario[0]->facturacion,
-                        'reportes' => $usuario[0]->reportes,
-                        'estado' => $usuario[0]->estado,
-                        'miembro_desde' => $usuario[0]->miembro_desde,
-                        'membresia' => $usuario[0]->membresia,
-                        'reportes' => $usuario[0]->reportes,
+                        'id' => $usuario->id,
+                        'nombre' => $usuario->nombre,
+                        'idrol' => $usuario->idrol,
+                        'rol' => $usuario->rol,
+                        'cedula' => $usuario->cedula,
+                        'is_logged' => $session['is_logged'],
+                        'administracion' => $usuario->administracion,
+                        'facturacion' => $usuario->facturacion,
+                        'reportes' => $usuario->reportes,
+                        'estado' => $session['status'],
+                        'miembro_desde' => $usuario->miembro_desde,
+                        'membresia' => $usuario->membresia,
+                        'reportes' => $usuario->reportes,
+                        'idsession' => $idsession,
                     ];
-                    
-                   
-                    $iduser = $usuario[0]->id;
 
-                    $user = [
-                        'logged' => 1,
-                        'ip' => $ip
-                    ];
-                    
-                    $this->usuarioModel->update($iduser, $user);
-                    
                     $this->session->set($sessiondata);
-            
+                    
                     return redirect()->to('inicio');
 
                 }else{
@@ -139,7 +150,8 @@ class Home extends BaseController {
         
         $data = $this->acl();
         
-        if ($data['logged'] == 1) {
+        
+        if ($data['is_logged'] == 1) {
             //  echo '<pre>'.var_export('inicio', true).'</pre>';exit;
 
             $data['session'] = $this->session;

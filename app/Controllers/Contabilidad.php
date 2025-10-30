@@ -7,16 +7,6 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class Contabilidad extends BaseController {
 
-    public function acl() {
-        $data['idrol'] = $this->session->idrol;
-        $data['id'] = $this->session->id;
-        $data['logged'] = $this->usuarioModel->_getLogStatus($data['id']);
-        $data['nombre'] = $this->session->nombre;
-        $data['miembro_desde'] = $this->session->created_at;
-        
-        return $data;
-    }
-
     public function planCuentas() {
 
         $data = $this->acl();

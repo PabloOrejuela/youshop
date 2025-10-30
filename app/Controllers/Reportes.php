@@ -7,15 +7,6 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class Reportes extends BaseController {
 
-    public function acl() {
-        $data['idrol'] = $this->session->idrol;
-        $data['id'] = $this->session->id;
-        $data['logged'] = $this->usuarioModel->_getLogStatus($data['id']);
-        $data['nombre'] = $this->session->nombre;
-        $data['miembro_desde'] = $this->session->created_at;
-        
-        return $data;
-    }
 
     public function reporteCierresCaja() {
         
@@ -34,8 +25,8 @@ class Reportes extends BaseController {
                             ->join('usuarios','cierres_caja.idusuario=usuarios.id','left')
                             ->orderBy('fecha_inicio', 'asc')->findAll();
 
-            $data['title'] = 'Administración';
-            $data['subtitle']='Cierres de caja';
+            $data['title'] = 'Reportes';
+            $data['subtitle']='Reporte de Cierres de caja';
             $data['main_content'] = 'reportes/rep_cierres_caja';
             return view('dashboard/index_admin', $data);
         }else{
