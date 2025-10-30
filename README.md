@@ -2,5 +2,10 @@
 
 <h3>Cambios</h3>
 <ul>
-<li>Primera subida del proyecto local</li>
+<li>Corregido el gitignore</li>
+</ul>
+
+<h3>Fixes</h3>
+<ul>
+<li>Corregido el gitignore</li>
 </ul>

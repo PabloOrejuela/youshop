@@ -1,137 +1,66 @@
-#-------------------------
-# Operating Specific Junk Files
-#-------------------------
-!.gitignore
+# ========================================
+# 🐘 PHP / CodeIgniter 4 .gitignore
+# ========================================
 
-# OS X
+# --- Archivos del sistema operativo ---
 .DS_Store
-.AppleDouble
-.LSOverride
-
-# OS X Thumbnails
-._*
-
-# Windows image file caches
 Thumbs.db
-ehthumbs.db
-Desktop.ini
 
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
-
-# Windows Installer files
-*.cab
-*.msi
-*.msm
-*.msp
-
-# Windows shortcuts
-*.lnk
-
-# Linux
-*~
-
-# KDE directory preferences
-.directory
-
-# Linux trash folder which might appear on any partition or disk
-.Trash-*
-
-#-------------------------
-# Environment Files
-#-------------------------
-# These should never be under version control,
-# as it poses a security risk.
-.env
-.vagrant
-Vagrantfile
-
-#-------------------------
-# Temporary Files
-#-------------------------
-writable/cache/*
-!writable/cache/index.html
-
-writable/logs/*
-!writable/logs/index.html
-
-writable/session/*
-!writable/session/index.html
-
-writable/uploads/*
-!writable/uploads/index.html
-
-writable/debugbar/*
-
-php_errors.log
-
-#-------------------------
-# Product Image Files
-#-------------------------
-public/images/productos
-
-#-------------------------
-# User Guide Temp Files
-#-------------------------
-user_guide_src/build/*
-user_guide_src/cilexer/build/*
-user_guide_src/cilexer/dist/*
-user_guide_src/cilexer/pycilexer.egg-info/*
-
-#-------------------------
-# Test Files
-#-------------------------
-tests/coverage*
-
-# Don't save phpunit under version control.
-phpunit
-
-#-------------------------
-# Composer
-#-------------------------
-vendor/
-
-#-------------------------
-# IDE / Development Files
-#-------------------------
-
-# Modules Testing
-_modules/*
-
-# phpenv local config
-.php-version
-
-# Jetbrains editors (PHPStorm, etc)
-.idea/
-*.iml
-
-# Netbeans
-nbproject/
-build/
-nbbuild/
-dist/
-nbdist/
-nbactions.xml
-nb-configuration.xml
-.nb-gradle/
-
-# Sublime Text
-*.tmlanguage.cache
-*.tmPreferences.cache
-*.stTheme.cache
-*.sublime-workspace
-*.sublime-project
-.phpintel
-/api/
-
-# Visual Studio Code
+# --- Configuración de IDEs / editores ---
 .vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
 
-/results/
-/phpunit*.xml
-/.phpunit.*.cache
+# --- Archivos temporales y de logs ---
+*.log
+*.bak
+*.tmp
+*.swp
+*.swo
 
-#-------------------------
-# Other Files
-#-------------------------
-db/
+# --- Archivos de entorno (muy importantes) ---
+.env
+.env.*
+!.env.example   # conserva solo el ejemplo vacío
+
+# --- Dependencias de Composer ---
+/vendor/
+
+# --- Archivos de caché de CodeIgniter ---
+/writable/cache/*
+!/writable/cache/index.html  # mantenemos el index.html vacío
+
+# --- Archivos de logs de CodeIgniter ---
+/writable/logs/*
+!/writable/logs/index.html
+
+# --- Archivos de sesiones ---
+/writable/session/*
+!/writable/session/index.html
+
+# --- Archivos temporales o subidos ---
+/writable/uploads/*
+!/writable/uploads/index.html
+
+# --- Archivos generados por herramientas externas ---
+/phpunit.xml
+/build/
+/coverage/
+/composer.lock  # opcional: si quieres fijar dependencias, elimínalo de aquí
+
+# --- Archivos de bases de datos locales ---
+*.sqlite
+*.sql
+*.db
+
+# --- Archivos de backup ---
+*.zip
+*.tar
+*.gz
+*.7z
+*.rar
+
+# --- Configuración de servidor local ---
+/.env.local
+/.htaccess.backup
