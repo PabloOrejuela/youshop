@@ -12,7 +12,7 @@ class Productos extends BaseController {
 
         $data = $this->acl();
         
-        if ($data['logged'] == 1 && $this->session->administracion == 1) {
+        if ($data['is_logged'] == 1 && $this->session->administracion == 1) {
             //  echo '<pre>'.var_export('inicio', true).'</pre>';exit;
 
             $data['session'] = $this->session;

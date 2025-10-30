@@ -2,7 +2,7 @@
 
 <h3>Cambios</h3>
 <ul>
-<li>Se ha cambiado la versión del ACL a al nueva versión controlada desde el baseController usando herencia</li>
+<li>Creado un reporte inicial de caja</li>
 </ul>
 
 <h3>Fixes</h3>

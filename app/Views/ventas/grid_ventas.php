@@ -2,7 +2,7 @@
 <!--begin::Row-->
 <div class="row">
     <!-- Start col -->
-    <div class="col-md-9">
+    <div class="col-md-12">
         <!-- /.card -->
         <div class="card mb-4">
             <!-- /.card-header -->
