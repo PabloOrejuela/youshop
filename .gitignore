@@ -30,6 +30,7 @@ Thumbs.db
 # --- Archivos de caché de CodeIgniter ---
 /writable/cache/*
 !/writable/cache/index.html  # mantenemos el index.html vacío
+/writable/*
 
 # --- Archivos de logs de CodeIgniter ---
 /writable/logs/*
